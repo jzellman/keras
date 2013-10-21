@@ -1,0 +1,27 @@
+$def with (events)
+<h2>Google Calendar Fetch Status</h2>
+
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Client Name</th>
+      <th>Start</th>
+      <th>End</th>
+      <th>Description</th>
+      <th>Category Name</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    $for event in events:
+       <tr>
+         <td>$event.client_name</td>
+         <td>$event.start</td>
+         <td>$event.end</td>
+         <td>$event.description</td>
+         <td>$event.category_name</td>
+         <td>$event.status</td>
+       <tr>
+  </tbody>
+</table>

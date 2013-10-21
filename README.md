@@ -24,7 +24,7 @@ Configuration is done via config.py. There is a sample file which can be used as
     cp config.py.example to config.py
     # edit config.py
     # create the db.
-    sqlite3 billing.db < schema.sql
+    sqlite3 keras.db < schema.sql
     # add required libs
     pip install -r requirements.txt
     # run the application    

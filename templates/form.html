@@ -1,0 +1,14 @@
+$def with (form, name='Save', method='POST', title="")
+$if title:
+   <h2>$title</h2>
+<div class="row">
+  <div class="span6">
+    <form action="" method="$method" class="form-vertical" enctype="multipart/form-data">
+      $:form.render_css()
+      <br/>
+      <input type="submit" class="btn btn-primary" value="$name"/>
+      or 
+      <a href="..">Cancel</a>
+    </form>
+  </div>
+</div>

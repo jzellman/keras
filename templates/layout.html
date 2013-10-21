@@ -1,0 +1,43 @@
+$def with (content)
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Billing</title>
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/datepicker.css" rel="stylesheet">
+    <link href="/static/css/timepicker.css" rel="stylesheet">
+    <script src="/static/js/jquery-1.7.2.min.js"></script>
+    <script src="/static/js/bootstrap-datepicker.js"></script>
+    <script src="/static/js/bootstrap-timepicker.js"></script>
+  </head>
+<body>
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="brand" href="/">
+          Billing
+        </a>
+      <ul class="nav">
+        $for n, l in breadcrumbs():
+            <li><a href="$l">$n</a></li>
+        <li><a href="/calfetch">Fetch Google Calendar Events</a>
+      </ul>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="padding-top:50px;">
+    $:content
+  </div>
+  <script type="text/javascript">
+    $$(document).ready(function(){
+        $$('.datepicker').datepicker({'format': 'mm/dd/yyyy'});
+        $$('.timepicker').timepicker({'minuteStep': 1, 'defaultTime': false});
+    });
+
+  </script>
+</body>
+</html>
+

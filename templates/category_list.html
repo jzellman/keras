@@ -1,0 +1,22 @@
+$def with (client, categories)
+
+<h2>Categories for $client.name</h2>
+<p>Use categories to classify your time. Examples include "Feature", "Maintenance", "Bug Fix", "Meeting", etc.
+</p>
+<a href="add">Add</a>
+<br/>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+   $for category in categories:
+       <tr>
+         <td>$category.name</td>
+         <td><a href="$category.id/edit">Edit</td>
+       <tr>
+  </tbody>
+</table>

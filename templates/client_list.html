@@ -1,0 +1,61 @@
+$def with (clients, totals)
+  <div class="row">
+    <h2>Clients</h2>
+  </div>
+  <div class="row">
+    <a href="/clients/add">Add Client</a>
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Total Invoiced</th>
+          <th>Hours Last Year</th>
+          <th>Hours This Year</th>
+          <th>Hours Last Month</th>
+          <th>Hours This Month</th>
+          <th>Hours Last Week</th>
+          <th>Hours This Week</th>
+          <th>Hours Yesterday</th>
+          <th>Hours Today</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td>Totals</td>
+          <td>$totals.total_invoiced</td>
+          <td>$totals.prev_year</td>
+          <td>$totals.this_year</td>
+          <td>$totals.prev_month</td>
+          <td>$totals.this_month</td>
+          <td>$totals.prev_week</td>
+          <td>$totals.this_week</td>
+          <td>$totals.prev_day</td>
+          <td>$totals.this_day</td>
+          <td></td>
+      </tfoot>
+      
+      <tbody>
+        $for c in clients:
+            <tr>
+              <td>$c.name</td>
+              <td>$c.total_invoiced</td>
+              <td>$c.prev_year</td>
+              <td>$c.this_year</td>
+              <td>$c.prev_month</td>
+              <td>$c.this_month</td>
+              <td>$c.prev_week</td>
+              <td>$c.this_week</td>
+              <td>$c.prev_day</td>
+              <td>$c.this_day</td>
+              <td>
+                <a href="$c.id">View</a> |
+                <a href="$c.id/entries/">Time Entries</a> |
+                <a href="$c.id/invoices/">Invoices</a> |
+                <a href="$c.id/categories/">Categories</a> |
+                <a href="$c.id/edit">Edit</a>
+              </td>
+            </tr>
+      </tbody>
+    </table>
+  </div>

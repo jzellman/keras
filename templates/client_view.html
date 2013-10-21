@@ -1,0 +1,44 @@
+$def with (client)
+<div class="row">
+  <div class="span">
+    <h2>$client.name</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="span3">
+    <dl class="dl-horizontal">
+      <dt>Actions</dt>
+      <dd><a href="$client.id/edit">Edit</a> | 
+        <a href="$client.id/invoices/">Invoices</a> |
+        <a href="$client.id/entries/">Entries</a>
+      </dd>
+      
+      <dt>Total Invoiced<dt>
+      <dd>$client.total_invoiced</dd>
+      <dt>Hours Last Year<dt>
+      <dd>$client.prev_year</dd>
+      <dt>Hours This Year<dt>
+      <dd>$client.this_year</dd>
+      <dt>Hours Last Month<dt>
+      <dd>$client.prev_month</dd>
+      <dt>Hours This Month<dt>
+      <dd>$client.this_month</dd>
+      <dt>Hours Last Week<dt>
+      <dd>$client.prev_week</dd>
+      <dt>Hours This Week<dt>
+      <dd>$client.this_week</dd>
+      <dt>Hours Yesterday</dt>
+      <dd>$client.prev_day</dd>
+      <dt>Hours Today</dt>
+      <dd>$client.this_day</dd>
+    </dl>
+    
+  </div>
+  <div class="span9">
+  <div class="span9">
+    $if client.notes:
+        <h4>Notes</h4>
+        $:markdown(client.notes)
+  </div>
+</div>
+<hr/>

@@ -1,0 +1,5 @@
+Fabric==1.6.1
+pep8==1.4.5
+pyflakes==0.7.2
+ClientForm==0.2.10
+logilab-common==0.59.1

@@ -1,0 +1,34 @@
+$def with (client, invoices)
+
+<h2>Invoices for $client.name</h2>
+
+<form method="POST" action="/clients/$client.id/invoices/generate">
+  <input type="submit" class="btn btn-primary" value="Generate Invoice"/>
+</form>
+<table class="table table-striped">
+  <tr>
+    <th>Number</th>
+    <th>Period</th>
+    <th>Hours</th>
+    <th>Status</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+$for invoice in invoices:
+    <tr>
+      <td>$invoice.id</td>
+      <td>$invoice.month</td>
+      <td>$invoice.total</td>
+      <td>$invoice.status</td>
+      <td>
+      $if invoice.receipt:
+          <a href="$invoice.id/receipt">View Receipt</a>
+      </td>
+      <td><a href="$invoice.id">View</a></td>
+      <td><a href="$invoice.id/edit">Edit</a></td>
+      <td><a href="$("%s.csv" % invoice.id)">CSV</a></td>
+
+    <tr>
+</table>

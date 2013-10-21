@@ -1,0 +1,36 @@
+$def with (client, month_entries)
+
+<h2>Time Entries for $client.name</h2>
+<a href="add">Add</a>
+<br/>
+$for summary in month_entries:
+    <h3>$summary.date</h3>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Category</th>
+        <th>Minutes</th>
+        <th>Time</th>
+        <th>Description</th>
+        <th>Invoice</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td>$summary.total hours</td>
+          <td colspan="5"></td>
+      </tfoot>
+      <tbody>
+    $for te in summary.entries:    
+        <tr>
+          <td>$te.category</td>
+          <td>$minutes(te.end_time-te.start_time)</td>
+          <td width=200>$fmt_date(te.start_time, te.end_time)</td>
+          <td>$te.description</td>
+          <td>$te.invoice_id</td>
+          <td><a href="/clients/$te.client_id/entries/$te.id/edit">Edit</td>
+        <tr>
+    </tbody>
+    </table>
+
