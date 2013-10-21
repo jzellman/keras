@@ -61,19 +61,19 @@ urls = (
 )
 
 
-def first_record(res):
+def get_or_404(res):
     try:
         return res[0]
     except IndexError:
-        return None
+        raise web.notfound()
 
 
 def get_one(table, record_id):
     if not record_id:
         return None
-    return first_record(db.select(table,
-                                  where="id=$record_id",
-                                  vars={'record_id': record_id}))
+    return get_or_404(db.select(table,
+                                where="id=$record_id",
+                                vars={'record_id': record_id}))
 
 
 def invoice_entries(invoice_id):
@@ -163,9 +163,9 @@ def invoices(client_id):
 
 
 def get_or_create_category(client, name):
-    cat = first_record(db.select("categories",
-                                 where="client_id=$client_id AND name=$name",
-                                 vars={'client_id': client.id, 'name': name}))
+    cat = get_or_404(db.select("categories",
+                               where="client_id=$client_id AND name=$name",
+                               vars={'client_id': client.id, 'name': name}))
     if cat:
         return cat
     db.insert("categories", client_id=client.id, name=name)
@@ -184,9 +184,9 @@ class CalendarFetch:
                                       config.g_calendar_name)]
 
         for event in events:
-            client = first_record(db.select("clients",
-                                            where="lower(name)=lower($name)",
-                                            vars={'name': event.client_name}))
+            client = get_or_404(db.select("clients",
+                                          where="lower(name)=lower($name)",
+                                          vars={'name': event.client_name}))
             if not client:
                 event['status'] = 'Client could not be found.'
                 continue
@@ -195,9 +195,9 @@ class CalendarFetch:
                 category = get_or_create_category(client, event.category_name)
                 category_id = category.id
 
-            entry = first_record(db.select("time_entries",
-                                           where="external_reference=$ref",
-                                           vars={'ref': event.id}))
+            entry = get_or_404(db.select("time_entries",
+                                         where="external_reference=$ref",
+                                         vars={'ref': event.id}))
             if not entry:
                 db.insert("time_entries",
                           client_id=client.id,
@@ -261,14 +261,19 @@ class InvoiceEdit:
         if i.receipt.filename:
             to_update = {'receipt_name': i.receipt.filename,
                          'receipt': buffer(i.receipt.file.read())}
-        db.update("invoices", where="id=$invoice_id",
+        db.update("invoices", where="id=$invoice_id and client_id=$client_id",
                   vars=locals(), **to_update)
         raise web.seeother("/clients/%s/invoices/" % client_id)
 
 
 class InvoiceReceipt:
     def GET(self, client_id, invoice_id):
-        return str(get_one("invoices", invoice_id).receipt)
+        i = get_or_404(
+            db.select("invoices",
+                      where="id=$invoice_id and client_id=$client_id",
+                      limit=1,
+                      vars=locals()))
+        return str(i.receipt)
 
 
 class InvoiceView:
