@@ -9,6 +9,7 @@ $for summary in month_entries:
       <thead>
       <tr>
         <th>Category</th>
+        <th>ID</th>
         <th>Minutes</th>
         <th>Time</th>
         <th>Description</th>
@@ -25,6 +26,7 @@ $for summary in month_entries:
     $for te in summary.entries:    
         <tr>
           <td>$te.category</td>
+          <td>$te.id</td>
           <td>$minutes(te.end_time-te.start_time)</td>
           <td width=200>$fmt_date(te.start_time, te.end_time)</td>
           <td>$te.description</td>

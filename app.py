@@ -62,10 +62,17 @@ urls = (
 
 
 def get_or_404(res):
+    first = get_safe(res)
+    if first:
+        return first
+    raise web.notfound()
+
+
+def get_safe(res):
     try:
         return res[0]
     except IndexError:
-        raise web.notfound()
+        return None
 
 
 def get_one(table, record_id):
@@ -163,9 +170,9 @@ def invoices(client_id):
 
 
 def get_or_create_category(client, name):
-    cat = get_or_404(db.select("categories",
-                               where="client_id=$client_id AND name=$name",
-                               vars={'client_id': client.id, 'name': name}))
+    cat = get_safe(db.select("categories",
+                              where="client_id=$client_id AND name=$name",
+                              vars={'client_id': client.id, 'name': name}))
     if cat:
         return cat
     db.insert("categories", client_id=client.id, name=name)
@@ -180,13 +187,14 @@ class CalendarFetch:
 
     def POST(self):
         events = [web.storage(e) for e
-                  in gcal.fetchEvents(config.g_username, config.g_password,
-                                      config.g_calendar_name)]
+                  in gcal.fetch_events(config.g_username,
+                                       config.g_password,
+                                        config.g_calendar_name)]
 
         for event in events:
-            client = get_or_404(db.select("clients",
-                                          where="lower(name)=lower($name)",
-                                          vars={'name': event.client_name}))
+            client = get_safe(db.select("clients",
+                                        where="lower(name)=lower($name)",
+                                        vars={'name': event.client_name}))
             if not client:
                 event['status'] = 'Client could not be found.'
                 continue
@@ -195,9 +203,8 @@ class CalendarFetch:
                 category = get_or_create_category(client, event.category_name)
                 category_id = category.id
 
-            entry = get_or_404(db.select("time_entries",
-                                         where="external_reference=$ref",
-                                         vars={'ref': event.id}))
+            entry = get_safe(db.select("time_entries",
+                                       where="external_reference=$ref",                                      vars={'ref': event.id}))
             if not entry:
                 db.insert("time_entries",
                           client_id=client.id,
@@ -310,6 +317,7 @@ class InvoiceView:
         client = get_one("clients", client_id)
         invoice = get_one('invoices', invoice_id)
         entries = invoice_entries(invoice.id)
+        _month_entries = month_entries(entries)
 
         if format == "csv":
             filename = 'Invoice for {} for {}.csv'.format(
@@ -319,7 +327,7 @@ class InvoiceView:
                 filename))
             return self.generate_csv(entries, client.hourly_rate)
         else:
-            return render.entry_list(client, entries)
+            return render.entry_list(client, _month_entries)
 
 
 class CategoryEdit:

@@ -31,7 +31,11 @@ def month_range(dt=None):
     "Returns the start and end times for for the month dt falls in"
     dt = dt or datetime.now()
     start = datetime(dt.year, dt.month, 1)
-    end = start.replace(month=start.month + 1) - timedelta(microseconds=1)
+    if start.month == 12:
+        end = start.replace(year=dt.year+1, month=1)
+    else:
+        end = start.replace(month=start.month + 1)
+    end = end - timedelta(microseconds=1)
     return start, end
 
 

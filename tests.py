@@ -29,6 +29,11 @@ class TestUtils(unittest.TestCase):
         start, end = utils.month_range(d)
         self.assertEqual(datetime(2010, 4, 1), start)
         self.assertEqual(datetime(2010, 4, 30, 23, 59, 59, 999999), end)
+        d = datetime(2012, 12, 27, 0, 0)
+        start, end = utils.month_range(d)
+        self.assertEqual(datetime(2012, 12, 1), start)
+        self.assertEqual(datetime(2012, 12, 31, 23, 59, 59, 999999), end)      
+
 
     def test_year_range(self):
         d = datetime(2010, 4, 16, 23, 3)
